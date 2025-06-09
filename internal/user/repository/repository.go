@@ -1,0 +1,12 @@
+package repository
+
+import (
+	"backend_template/internal/user/model"
+	"context"
+)
+
+type UserRepository interface {
+	CreateUser(ctx context.Context, user *model.UserModel) error
+	GetUserByEmail(ctx context.Context, email string) (*model.UserModel, error)
+	GetUserByID(ctx context.Context, id uint) (*model.UserModel, error)
+}
