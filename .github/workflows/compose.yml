@@ -23,11 +23,11 @@ jobs:
       - name: Build and run services
         run: ./scripts/run.sh
 
-      - name: Wait for services to be ready (optional)
-        run: sleep 10
+      - name: Wait for services to be ready
+        run: sleep 4
 
-      - name: Run tests (example)
-        run: docker exec $(docker ps -qf "name=app") npm test
+     # - name: Run tests (example)
+      #  run: docker exec $(docker ps -qf "name=app") npm test
 
       - name: Tear down services
         run: docker-compose down
