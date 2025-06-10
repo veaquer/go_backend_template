@@ -10,6 +10,7 @@ import (
 	"backend_template/internal/logger"
 	"backend_template/internal/user/repository"
 	"backend_template/internal/user/service"
+	"backend_template/internal/migration"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -25,6 +26,7 @@ func NewApp() (*App, error) {
 		logger.New,
 		config.Load,
 		db.ProvideDB,
+		migration.Run,
 		repository.NewUserRepository,
 		token.NewTokenManager,
 		service.NewUserService,
