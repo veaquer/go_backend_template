@@ -1,17 +1,32 @@
 package bootstrap
 
 import (
+	"backend_template/internal/auth"
 	"backend_template/internal/auth/token"
 	"backend_template/internal/middleware"
-	"backend_template/internal/user/service"
-	"fmt"
+	"backend_template/internal/user/handler"
 
 	"github.com/gin-gonic/gin"
 )
 
-func ProvideRouter(userSvc *service.UserService, tokenMgr *token.TokenManager) *gin.Engine {
+func ProvideRouter(userHandler *handler.UserHandler, tk *token.TokenManager) *gin.Engine {
 	r := gin.Default()
 	r.Use(middleware.ErrorHandler())
-	fmt.Println("Set up router")
+	authMiddleware := auth.NewAuthMiddleware(tk)
+
+	AuthGroup := r.Group("/auth")
+	{
+		AuthGroup.POST("/register", userHandler.Register)
+		AuthGroup.POST("/login", userHandler.Login)
+		AuthGroup.GET("/verify_email", userHandler.VerifyEmail)
+		AuthGroup.POST("/refresh", authMiddleware.RequireRefreshToken(), userHandler.Refresh)
+		AuthGroup.POST("/logout", userHandler.Logout)
+	}
+
+	user := r.Group("/user", authMiddleware.AuthRequired())
+	{
+		user.GET("/profile", userHandler.Profile)
+	}
+
 	return r
 }

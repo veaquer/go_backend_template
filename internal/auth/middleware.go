@@ -20,8 +20,6 @@ func NewAuthMiddleware(tm *token.TokenManager) *AuthMiddleware {
 	return &AuthMiddleware{tokens: tm}
 }
 
-
-
 func (m *AuthMiddleware) AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -50,6 +48,35 @@ func (m *AuthMiddleware) AuthRequired() gin.HandlerFunc {
 		}
 
 		ctx := context.WithValue(c.Request.Context(), constants.UserIdCtxKey, id)
+		c.Set(constants.UserIdCtxKey, id)
+		c.Request = c.Request.WithContext(ctx)
+
+		c.Next()
+	}
+}
+
+func (m *AuthMiddleware) RequireRefreshToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		refreshToken, err := c.Cookie("refresh_token")
+		if err != nil {
+			utils.AbortWithErrorNew(c, http.StatusUnauthorized, "No refresh token")
+			return
+		}
+
+		tok, err := m.tokens.VerifyRefreshToken(refreshToken)
+		if err != nil {
+			utils.AbortWithErrorNew(c, http.StatusUnauthorized, "Invalid or expired refresh token")
+			return
+		}
+
+		id, err := m.tokens.ExtractToken(tok)
+		if err != nil {
+			utils.AbortWithErrorNew(c, http.StatusUnauthorized, "Failed to extract token")
+			return
+		}
+
+		ctx := context.WithValue(c.Request.Context(), constants.UserIdCtxKey, id)
+		c.Set(constants.UserIdCtxKey, id)
 		c.Request = c.Request.WithContext(ctx)
 
 		c.Next()

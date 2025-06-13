@@ -2,12 +2,9 @@ package model
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type EmailVerificationModel struct {
-	gorm.Model
 	ID        uint   `gorm:"PrimaryKey"`
 	UserID    uint   `gorm:"index"`
 	Email     string `gorm:"index"`

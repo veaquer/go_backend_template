@@ -1,10 +1,10 @@
 package email
 
 type Email struct {
-	To string
+	To      string
 	Subject string
-	Body string
-	isHTML bool
+	Body    string
+	IsHTML  bool
 }
 
 type Sender interface {

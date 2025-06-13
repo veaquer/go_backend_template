@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+type ErrorResponder interface {
+	Error() string      // Required by `error`
+	GetCode() int       // HTTP Status Code
+	GetMessage() string // User-facing message
+}
+
 type AppError struct {
 	Message   string `json:"message"`
 	Code      int    `json:"code"`
@@ -18,6 +24,14 @@ func (e *AppError) Error() string {
 	}
 
 	return fmt.Sprintf("AppError: %s", e.Message)
+}
+
+func (e *AppError) GetMessage() string {
+	return e.Message
+}
+
+func (e *AppError) GetCode() int {
+	return e.Code
 }
 
 func (e *AppError) Unwrap() error {
@@ -38,6 +52,13 @@ func Wrap(msg string, code int, internal error) *AppError {
 		Message:  msg,
 		Code:     code,
 		Internal: internal,
+	}
+}
+
+func NewInternal(msg string) *AppError {
+	return &AppError{
+		Message: msg,
+		Code:    500,
 	}
 }
 

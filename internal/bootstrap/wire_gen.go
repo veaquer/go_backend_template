@@ -11,10 +11,15 @@ import (
 	"backend_template/internal/config"
 	"backend_template/internal/db"
 	"backend_template/internal/logger"
+	"backend_template/internal/user/handler"
 	"backend_template/internal/user/repository"
-	"backend_template/internal/user/service"
-
+	service2 "backend_template/internal/user/service"
+	repository2 "backend_template/internal/verification/repository"
+	"backend_template/internal/verification/service"
+	"backend_template/pkg/email"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 // Injectors from wire.go:
@@ -27,11 +32,18 @@ func NewApp() (*App, error) {
 		return nil, err
 	}
 	userRepository := repository.NewUserRepository(gormDB)
-	userService := service.NewUserService(userRepository, zapLogger)
+	verificationRepository := repository2.NewVerificationRepository(gormDB)
+	goMailSender := email.NewGoMailSender(configConfig)
+	verificationService := service.NewVerificationService(verificationRepository, goMailSender, configConfig)
 	tokenManager := token.NewTokenManager(configConfig)
-	engine := ProvideRouter(userService, tokenManager)
+	userService := service2.NewUserService(userRepository, zapLogger, verificationService, tokenManager)
+	redisCache := ProvideRedis(configConfig)
+	userHandler := handler.NewUserHandler(userService, verificationService, redisCache)
+	engine := ProvideRouter(userHandler, tokenManager)
 	app := &App{
 		Router: engine,
+		Logger: zapLogger,
+		DB:     gormDB,
 	}
 	return app, nil
 }
@@ -40,4 +52,6 @@ func NewApp() (*App, error) {
 
 type App struct {
 	Router *gin.Engine
+	Logger *zap.Logger
+	DB     *gorm.DB
 }

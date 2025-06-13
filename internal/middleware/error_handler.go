@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"backend_template/pkg/errors/apperror"
-	"errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,10 +11,12 @@ func ErrorHandler() gin.HandlerFunc {
 		c.Next()
 
 		for _, ginErr := range c.Errors {
-			var appErr *apperror.AppError
-			if errors.As(ginErr.Err, &appErr) {
-				c.JSON(appErr.Code, gin.H{"error": appErr.Message})
+			if err, ok := ginErr.Err.(apperror.ErrorResponder); ok {
+				c.JSON(err.GetCode(), gin.H{"error": err.GetMessage()})
+				return
 			}
+			// fallback for unexpected errors
+			c.JSON(500, gin.H{"error": "Internal Server Error"})
 		}
 	}
 }
