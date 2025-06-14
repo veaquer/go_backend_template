@@ -95,12 +95,11 @@ EMAIL_PASS=your_password
 
 ### Running the Application
 
-#### Using Docker
+#### Using Docker Compose
 
 ```bash
 # Build and run the application
-docker build -f build/Dockerfile -t go-backend .
-docker run -p 4000:4000 go-backend
+./scripts/run.sh
 ```
 
 #### Local Development
