@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"backend_template/pkg/errors/apperror"
+	"github.com/veaquer/go_backend_template/pkg/errors/apperror"
 
 	"github.com/gin-gonic/gin"
 )

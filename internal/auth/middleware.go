@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"backend_template/internal/auth/token"
-	"backend_template/pkg/constants"
-	"backend_template/pkg/errors/apperror"
-	"backend_template/pkg/utils"
+	"github.com/veaquer/go_backend_template/internal/auth/token"
+	"github.com/veaquer/go_backend_template/pkg/constants"
+	"github.com/veaquer/go_backend_template/pkg/errors/apperror"
+	"github.com/veaquer/go_backend_template/pkg/utils"
 	"context"
 	"net/http"
 	"strings"

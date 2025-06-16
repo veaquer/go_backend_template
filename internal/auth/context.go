@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"backend_template/pkg/constants"
+	"github.com/veaquer/go_backend_template/pkg/constants"
 	"context"
 	"errors"
 )

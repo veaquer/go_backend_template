@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	"backend_template/internal/cache"
-	"backend_template/internal/config"
+	"github.com/veaquer/go_backend_template/internal/cache"
+	"github.com/veaquer/go_backend_template/internal/config"
 	"context"
 
 	"github.com/redis/go-redis/v9"

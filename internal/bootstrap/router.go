@@ -1,10 +1,10 @@
 package bootstrap
 
 import (
-	"backend_template/internal/auth"
-	"backend_template/internal/auth/token"
-	"backend_template/internal/middleware"
-	"backend_template/internal/user/handler"
+	"github.com/veaquer/go_backend_template/internal/auth"
+	"github.com/veaquer/go_backend_template/internal/auth/token"
+	"github.com/veaquer/go_backend_template/internal/middleware"
+	"github.com/veaquer/go_backend_template/internal/user/handler"
 
 	"github.com/gin-gonic/gin"
 )

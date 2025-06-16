@@ -1,4 +1,4 @@
-module backend_template
+module github.com/veaquer/go_backend_template
 
 go 1.24.4
 

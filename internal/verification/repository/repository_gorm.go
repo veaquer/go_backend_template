@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"backend_template/internal/verification/model"
+	"github.com/veaquer/go_backend_template/internal/verification/model"
 	"context"
 
 	"gorm.io/gorm"

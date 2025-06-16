@@ -1,14 +1,14 @@
 package service
 
 import (
-	"backend_template/internal/auth/token"
-	"backend_template/internal/cache"
-	"backend_template/internal/user/dto"
-	"backend_template/internal/user/model"
-	"backend_template/internal/user/repository"
-	"backend_template/internal/verification/service"
-	"backend_template/pkg/errors/apperror"
-	"backend_template/pkg/hash"
+	"github.com/veaquer/go_backend_template/internal/auth/token"
+	"github.com/veaquer/go_backend_template/internal/cache"
+	"github.com/veaquer/go_backend_template/internal/user/dto"
+	"github.com/veaquer/go_backend_template/internal/user/model"
+	"github.com/veaquer/go_backend_template/internal/user/repository"
+	"github.com/veaquer/go_backend_template/internal/verification/service"
+	"github.com/veaquer/go_backend_template/pkg/errors/apperror"
+	"github.com/veaquer/go_backend_template/pkg/hash"
 	"context"
 	"errors"
 	"net/http"

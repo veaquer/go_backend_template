@@ -1,7 +1,7 @@
 package token
 
 import (
-	"backend_template/internal/config"
+	"github.com/veaquer/go_backend_template/internal/config"
 	"errors"
 	"time"
 

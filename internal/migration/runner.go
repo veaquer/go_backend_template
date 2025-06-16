@@ -1,8 +1,8 @@
 package migration
 
 import (
-	UserModel "backend_template/internal/user/model"
-	VerificationModel "backend_template/internal/verification/model"
+	UserModel "github.com/veaquer/go_backend_template/internal/user/model"
+	VerificationModel "github.com/veaquer/go_backend_template/internal/verification/model"
 	"log"
 
 	"gorm.io/gorm"

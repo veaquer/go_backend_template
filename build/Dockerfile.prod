@@ -1,0 +1,54 @@
+# Stage 1: Build the Go binary
+FROM golang:1.24-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates
+
+WORKDIR /app
+
+# Copy go mod files first for better caching
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download && go mod verify
+
+# Copy source code
+COPY . .
+
+COPY .env /app
+
+RUN echo "BACKEND_URL=$BACKEND_URL"
+
+# Build the binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags="-w -s" \
+    -o backend \
+    ./cmd/server
+
+# Stage 2: Minimal runtime image
+FROM alpine:latest
+
+# Install runtime dependencies
+RUN apk add --no-cache ca-certificates tzdata
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+WORKDIR /app
+
+# Copy the binary from builder stage
+COPY --from=builder /app/backend .
+
+# Set ownership and permissions
+RUN chown appuser:appgroup backend && \
+    chmod +x backend
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
+EXPOSE 4000
+
+# Execute the binary
+CMD ["./backend"]

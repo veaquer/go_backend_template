@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"backend_template/pkg/errors/apperror"
+	"github.com/veaquer/go_backend_template/pkg/errors/apperror"
 	"fmt"
 	"net/http"
 	"strings"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"backend_template/internal/bootstrap"
-	"backend_template/internal/migration"
+	"github.com/veaquer/go_backend_template/internal/bootstrap"
+	"github.com/veaquer/go_backend_template/internal/migration"
 	"log"
 )
 

@@ -1,13 +1,13 @@
 package service
 
 import (
-	"backend_template/internal/config"
-	UserModel "backend_template/internal/user/model"
-	"backend_template/internal/verification/model"
-	"backend_template/internal/verification/repository"
-	"backend_template/pkg/constants"
-	"backend_template/pkg/email"
-	"backend_template/pkg/errors/apperror"
+	"github.com/veaquer/go_backend_template/internal/config"
+	UserModel "github.com/veaquer/go_backend_template/internal/user/model"
+	"github.com/veaquer/go_backend_template/internal/verification/model"
+	"github.com/veaquer/go_backend_template/internal/verification/repository"
+	"github.com/veaquer/go_backend_template/pkg/constants"
+	"github.com/veaquer/go_backend_template/pkg/email"
+	"github.com/veaquer/go_backend_template/pkg/errors/apperror"
 
 	"context"
 	"net/http"
@@ -37,7 +37,7 @@ func (s *VerificationService) SendVerification(ctx context.Context, UserID uint,
 	}
 
 	var URL string
-	if s.cfg.Env == "dev" && len(s.cfg.BackendUrl) == 0 {
+	if s.cfg.Env == "development" && len(s.cfg.BackendUrl) == 0 {
 		URL = "http://localhost:" + s.cfg.Port
 	} else {
 		URL = s.cfg.BackendUrl

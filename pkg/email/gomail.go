@@ -1,7 +1,7 @@
 package email
 
 import (
-	"backend_template/internal/config"
+	"github.com/veaquer/go_backend_template/internal/config"
 	"fmt"
 
 	"gopkg.in/mail.v2"

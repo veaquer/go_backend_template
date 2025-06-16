@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"backend_template/internal/user/dto"
-	UserService "backend_template/internal/user/service"
-	"backend_template/internal/verification/service"
-	"backend_template/pkg/constants"
-	"backend_template/pkg/errors/apperror"
-	"backend_template/pkg/utils"
-	"backend_template/pkg/validator"
+	"github.com/veaquer/go_backend_template/internal/user/dto"
+	UserService "github.com/veaquer/go_backend_template/internal/user/service"
+	"github.com/veaquer/go_backend_template/internal/verification/service"
+	"github.com/veaquer/go_backend_template/pkg/constants"
+	"github.com/veaquer/go_backend_template/pkg/errors/apperror"
+	"github.com/veaquer/go_backend_template/pkg/utils"
+	"github.com/veaquer/go_backend_template/pkg/validator"
 
 	"github.com/gin-gonic/gin"
 )

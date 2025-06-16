@@ -1,5 +1,3 @@
 tmp
 vendor
 *.log
-*.test
-*.swp

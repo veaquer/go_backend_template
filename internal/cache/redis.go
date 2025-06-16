@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"backend_template/internal/user/model"
+	"github.com/veaquer/go_backend_template/internal/user/model"
 	"context"
 	"encoding/json"
 	"fmt"

@@ -7,17 +7,18 @@
 package bootstrap
 
 import (
-	"backend_template/internal/auth/token"
-	"backend_template/internal/config"
-	"backend_template/internal/db"
-	"backend_template/internal/logger"
-	"backend_template/internal/user/handler"
-	"backend_template/internal/user/repository"
-	service2 "backend_template/internal/user/service"
-	repository2 "backend_template/internal/verification/repository"
-	"backend_template/internal/verification/service"
-	"backend_template/pkg/email"
 	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
+	"github.com/veaquer/go_backend_template/internal/auth/token"
+	"github.com/veaquer/go_backend_template/internal/config"
+	"github.com/veaquer/go_backend_template/internal/db"
+	"github.com/veaquer/go_backend_template/internal/logger"
+	"github.com/veaquer/go_backend_template/internal/user/handler"
+	"github.com/veaquer/go_backend_template/internal/user/repository"
+	service2 "github.com/veaquer/go_backend_template/internal/user/service"
+	repository2 "github.com/veaquer/go_backend_template/internal/verification/repository"
+	"github.com/veaquer/go_backend_template/internal/verification/service"
+	"github.com/veaquer/go_backend_template/pkg/email"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -36,9 +37,9 @@ func NewApp() (*App, error) {
 	goMailSender := email.NewGoMailSender(configConfig)
 	verificationService := service.NewVerificationService(verificationRepository, goMailSender, configConfig)
 	tokenManager := token.NewTokenManager(configConfig)
-	userService := service2.NewUserService(userRepository, zapLogger, verificationService, tokenManager)
 	redisCache := ProvideRedis(configConfig)
-	userHandler := handler.NewUserHandler(userService, verificationService, redisCache)
+	userService := service2.NewUserService(userRepository, zapLogger, verificationService, tokenManager, redisCache)
+	userHandler := handler.NewUserHandler(userService, verificationService)
 	engine := ProvideRouter(userHandler, tokenManager)
 	app := &App{
 		Router: engine,
@@ -55,3 +56,14 @@ type App struct {
 	Logger *zap.Logger
 	DB     *gorm.DB
 }
+
+var providers = wire.NewSet(
+	ProvideRedis,
+	ProvideRouter, db.ProvideDB,
+)
+
+var repositories = wire.NewSet(repository.NewUserRepository, repository2.NewVerificationRepository)
+
+var services = wire.NewSet(service2.NewUserService, service.NewVerificationService)
+
+var handlers = wire.NewSet(handler.NewUserHandler)

@@ -1,7 +1,7 @@
 package db
 
 import (
-	"backend_template/internal/config"
+	"github.com/veaquer/go_backend_template/internal/config"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

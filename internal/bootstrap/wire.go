@@ -4,16 +4,16 @@
 package bootstrap
 
 import (
-	"backend_template/internal/auth/token"
-	"backend_template/internal/config"
-	"backend_template/internal/db"
-	"backend_template/internal/logger"
-	"backend_template/internal/user/handler"
-	userRepo "backend_template/internal/user/repository"
-	userService "backend_template/internal/user/service"
-	"backend_template/internal/verification/repository"
-	"backend_template/internal/verification/service"
-	"backend_template/pkg/email"
+	"github.com/veaquer/go_backend_template/internal/auth/token"
+	"github.com/veaquer/go_backend_template/internal/config"
+	"github.com/veaquer/go_backend_template/internal/db"
+	"github.com/veaquer/go_backend_template/internal/logger"
+	"github.com/veaquer/go_backend_template/internal/user/handler"
+	userRepo "github.com/veaquer/go_backend_template/internal/user/repository"
+	userService "github.com/veaquer/go_backend_template/internal/user/service"
+	"github.com/veaquer/go_backend_template/internal/verification/repository"
+	"github.com/veaquer/go_backend_template/internal/verification/service"
+	"github.com/veaquer/go_backend_template/pkg/email"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -27,21 +27,37 @@ type App struct {
 	DB     *gorm.DB
 }
 
+var providers = wire.NewSet(
+		ProvideRedis,
+		ProvideRouter,
+		db.ProvideDB,
+		)
+
+var repositories = wire.NewSet(
+		userRepo.NewUserRepository,
+		repository.NewVerificationRepository,
+		)
+
+var services = wire.NewSet(
+		userService.NewUserService,
+		service.NewVerificationService,
+		)
+
+var handlers = wire.NewSet(
+		handler.NewUserHandler,
+		)
+
 func NewApp() (*App, error) {
 
 	wire.Build(
 		logger.New,
 		config.Load,
-		db.ProvideDB,
-		userRepo.NewUserRepository,
 		token.NewTokenManager,
 		email.NewGoMailSender,
-		repository.NewVerificationRepository,
-		service.NewVerificationService,
-		ProvideRedis,
-		userService.NewUserService,
-		handler.NewUserHandler,
-		ProvideRouter,
+		providers,
+		repositories,
+		services,
+		handlers,
 		wire.Struct(new(App), "Router", "Logger", "DB"),
 	)
 
